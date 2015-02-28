@@ -185,6 +185,18 @@ public class TwoStepsSystemStrategy extends
 
 	}
 
+	/*** Executor Handling ***/
+
+	public ExecutorService getExecutorService() {
+		return internalSystemStrategy.getExecutorService();
+	}
+
+	public void setExecutorService(ExecutorService executor) {
+		internalSystemStrategy.setExecutorService(executor);
+	}
+
+	/*** Agent Handling ***/
+
 	@Override
 	public void addAgent(final ITwoStepsAgent agent) {
 		if (!this.agents.contains(agent)) {
