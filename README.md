@@ -21,6 +21,14 @@ inside the project folder. You can then declare it as a dependency for your proj
 
 to your pom.xml file.
 
+### Using this project with eclipse
+
+If you want to import on this project inside eclipse, you can simply run
+
+`mvn eclipse:eclipse`
+
+Maven will create the appropriate configuration files and you will be able to import the project in your workspace as usual (for more details, please refer to the [Maven Eclipse plugin documentation](https://maven.apache.org/plugins/maven-eclipse-plugin/eclipse-mojo.html)).
+
 DESCRIPTION
 -----------
 
