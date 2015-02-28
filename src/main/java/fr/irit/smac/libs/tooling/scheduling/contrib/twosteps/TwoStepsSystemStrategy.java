@@ -157,8 +157,6 @@ public class TwoStepsSystemStrategy extends
 	@Override
 	protected void doStep() {
 
-		pauseLock.lock();
-
 		addPendingAgents();
 
 		// start the perceive of the agents and block
@@ -182,8 +180,6 @@ public class TwoStepsSystemStrategy extends
 		}
 
 		removePendingAgents();
-
-		pauseLock.unlock();
 
 	}
 

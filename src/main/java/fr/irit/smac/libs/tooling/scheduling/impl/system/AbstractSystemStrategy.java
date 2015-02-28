@@ -29,8 +29,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import fr.irit.smac.libs.tooling.scheduling.IAgentsHandler;
 import fr.irit.smac.libs.tooling.scheduling.IExecutorServiceHandler;
@@ -62,8 +60,6 @@ public abstract class AbstractSystemStrategy<AgentType> implements
 	protected volatile ExecutorService agentExecutor;
 	protected final ExecutorService systemExecutor = Executors
 			.newFixedThreadPool(1);
-
-	protected Lock pauseLock = new ReentrantLock();
 
 	private volatile Boolean doRun = false;
 	private volatile long delay = 0L;
@@ -151,10 +147,8 @@ public abstract class AbstractSystemStrategy<AgentType> implements
 
 	protected Runnable pausingRunnable = new Runnable() {
 		public void run() {
-			pauseLock.lock();
 			doRun = false;
 			delay = 0L;
-			pauseLock.unlock();
 		}
 	};
 
@@ -164,11 +158,9 @@ public abstract class AbstractSystemStrategy<AgentType> implements
 
 	protected Runnable shutdownRunnable = new Runnable() {
 		public void run() {
-			pauseLock.lock();
 			doRun = false;
 			agentExecutor.shutdown();
 			systemExecutor.shutdown();
-			pauseLock.unlock();
 		}
 	};
 

@@ -32,8 +32,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import fr.irit.smac.libs.tooling.scheduling.IAgentStrategy;
 
@@ -60,13 +58,8 @@ public class SynchronizedSystemStrategy extends
 	private final Map<IAgentStrategy, Callable<?>> agentsCallables = Collections
 			.synchronizedMap(new HashMap<IAgentStrategy, Callable<?>>());
 
-	private Lock pauseLock = new ReentrantLock();
-
 	@Override
 	protected void doStep() {
-
-		pauseLock.lock();
-
 		Set<Future<?>> executionResults = new HashSet<Future<?>>();
 
 		// start the execution of the agents
@@ -84,7 +77,6 @@ public class SynchronizedSystemStrategy extends
 				e.printStackTrace();
 			}
 		}
-		pauseLock.unlock();
 	}
 
 	@Override
