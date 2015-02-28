@@ -92,6 +92,30 @@ public class TwoStepsSystemStrategy extends
 		internalSystemStrategy = new SynchronizedSystemStrategy(
 				new LinkedHashSet<IAgentStrategy>(), agentExecutor);
 		this.addAgents(agents);
+
+		// replace inherited shutdownRunnable by its own
+		final Runnable inheritedShutdownRunnable = shutdownRunnable;
+		shutdownRunnable = new Runnable() {
+
+			@Override
+			public void run() {
+				// shutdown internalSystemStrategy
+				//
+				// NOTE: since internalSystemStrategy is only accessed by
+				// ourself on a step-by-step basis, it is guaranteed that its
+				// execution queue will be empty by the time we reach
+				// shutdown(). Meaning that no lingering agent execution task
+				// will be present in its queue.
+				// Consequently we do not need to block to satisfy the interface
+				// contract that now agent will be executed after shutdown() has
+				// returned.
+				internalSystemStrategy.shutdown();
+
+				// propagate to inherited shutdown task
+				inheritedShutdownRunnable.run();
+
+			}
+		};
 	}
 
 	public TwoStepsSystemStrategy(Collection<ITwoStepsAgent> agents) {
