@@ -51,6 +51,16 @@ import java.util.concurrent.Future;
  * completion. The {@link #run} should not block in any case, as the system
  * should continue its execution until the {@link #pause} or {@link #shutdown}
  * method is called.
+ * <p>
+ * However the "desired state" mainly concerns agent execution, meaning that,
+ * e.g., it is considered acceptable for the Future returned by
+ * {@link #shutdown} to complete as soon as it is guaranteed that no agent will
+ * be executed, even if some internals components are still in the process of
+ * shutting down.
+ * <p>
+ * Overall, these requirements should be considered from the <bold>agent
+ * execution</bold> point of view, and not necessarily from the actual low-level
+ * system point of view (threads and so on).
  * 
  * @author jorquera
  * 
