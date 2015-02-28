@@ -50,7 +50,7 @@ public class TwoStepsSystemStrategy extends
 		PERCEIVE, DECIDE_ACT
 	};
 
-	private STATE currentState = STATE.PERCEIVE;
+	private volatile STATE currentState = STATE.PERCEIVE;
 
 	protected class AgentWrapper implements IAgentStrategy {
 
@@ -80,6 +80,8 @@ public class TwoStepsSystemStrategy extends
 	}
 
 	private final Map<ITwoStepsAgent, AgentWrapper> agentWrappers = new ConcurrentHashMap<ITwoStepsAgent, AgentWrapper>();
+
+	// NOTE: BlockingQueue implem is thread-safe
 	private final BlockingQueue<ITwoStepsAgent> pendingAddedAgents = new LinkedBlockingDeque<ITwoStepsAgent>();
 	private final BlockingQueue<ITwoStepsAgent> pendingRemovedAgents = new LinkedBlockingDeque<ITwoStepsAgent>();
 
