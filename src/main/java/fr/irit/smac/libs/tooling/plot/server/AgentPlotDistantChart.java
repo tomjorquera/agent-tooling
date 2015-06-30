@@ -29,7 +29,7 @@ import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
 /**
  * Representation of a distant chart made by a client.
  * 
- * @author Alexandre Perles
+ * @author Alexandre Perles, Thomas Sontheimer
  * 
  */
 public class AgentPlotDistantChart implements IAgentPlotChart {
@@ -45,8 +45,19 @@ public class AgentPlotDistantChart implements IAgentPlotChart {
 	}
 
 	@Override
+	public void add(double _y) {
+		add("", _y);
+	}
+
+	@Override
 	public void add(double _x, double _y) {
 		add("", _x, _y);
+	}
+
+	@Override
+	public void add(String _serieName, double _y) {
+		out.println("add;" + name + ";" + _serieName + ";;" + _y);
+		out.flush();
 	}
 
 	@Override

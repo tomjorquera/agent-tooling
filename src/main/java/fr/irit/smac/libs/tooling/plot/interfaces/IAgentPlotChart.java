@@ -24,10 +24,17 @@ package fr.irit.smac.libs.tooling.plot.interfaces;
 /**
  * Common chart's interface between the server and the client.
  * 
- * @author Alexandre Perles
+ * @author Alexandre Perles, Thomas Sontheimer
  * 
  */
 public interface IAgentPlotChart {
+	/**
+	 * Add the point (xMax+1, _y) to the first serie of the chart.
+	 * 
+	 * @param _y
+	 */
+	public void add(double _y);
+
 	/**
 	 * Add the point (_x,_y) to the first serie of the chart.
 	 * 
@@ -35,6 +42,14 @@ public interface IAgentPlotChart {
 	 * @param _y
 	 */
 	public void add(double _x, double _y);
+
+	/**
+	 * Add the point (xMax+1, _y) to the _serie serie of the chart.
+	 * 
+	 * @param _serieName
+	 * @param _y
+	 */
+	public void add(String _serieName, double _y);
 
 	/**
 	 * Add the point (_x, _y) to the _serie serie of the chart.
