@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 import fr.irit.smac.libs.tooling.plot.commons.ChartType;
+import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
 
 /**
  * Class handling the connection o a new client to the server.
@@ -59,28 +60,49 @@ public class AgentPlotConnectedClient implements Runnable {
 		try {
 			while ((line = in.readLine()) != null) {
 				String[] res = line.split(";");
-				if (res[0].equals("config")) {
-					agentPlotServer
-							.configChart(res[1], ChartType.valueOf(res[2]));
-				} else if (res[0].equals("add")) {
-					if (res[2].isEmpty())
-						agentPlotServer.getChart(res[1]).add(
-								Double.parseDouble(res[3]),
-								Double.parseDouble(res[4]));
-					else
-						agentPlotServer.getChart(res[1]).add(
-								res[2],
-								Double.parseDouble(res[3]),
-								Double.parseDouble(res[4]));
-				} else if (res[0].equals("close")) {
-					agentPlotServer.getChart(res[1]).close();
+				switch (res[0]) {
+				case "config":
+					config(res);
+					break;
+				case "add":
+					add(res);
+					break;
+				case "close":
+					close(res);
+					break;
 				}
-
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private void close(String[] res) {
+		agentPlotServer.getChart(res[1]).close();
+	}
+
+	private void add(String[] res) {
+		IAgentPlotChart chart = agentPlotServer.getChart(res[1]);
+		double y = Double.parseDouble(res[4]);
+		if (res[3].isEmpty()) {
+			if (res[2].isEmpty()) {
+				chart.add(y);
+			} else {
+				chart.add(res[2], y);
+			}
+		} else {
+			double x = Double.parseDouble(res[3]);
+			if (res[2].isEmpty()) {
+				chart.add(x, y);
+			} else {
+				chart.add(res[2], x, y);
+			}
+		}
+	}
+
+	private void config(String[] res) {
+		agentPlotServer.configChart(res[1], ChartType.valueOf(res[2]));
 	}
 
 }
