@@ -48,7 +48,7 @@ import fr.irit.smac.libs.tooling.plot.interfaces.IAgentPlotChart;
 /**
  * Real chart displayed by a server.
  * 
- * @author Alexandre Perles
+ * @author Alexandre Perles, Thomas Sontheimer
  * 
  */
 public class AgentPlotChart implements IAgentPlotChart {
@@ -193,10 +193,27 @@ public class AgentPlotChart implements IAgentPlotChart {
 	}
 
 	@Override
+	public void add(double _y) {
+		if (firstSerie == null)
+			firstSerie = "Default";
+		add(firstSerie, _y);
+	}
+
+	@Override
 	public void add(double _x, double _y) {
 		if (firstSerie == null)
 			firstSerie = "Default";
 		add(firstSerie, _x, _y);
+	}
+
+	@Override
+	public void add(String _serieName, double _y) {
+		double x = getSeries(_serieName).getMaxX();
+		if (Double.isNaN(x)) {
+			x = 0;
+		}
+		x += 1;
+		add(_serieName, x, _y);
 	}
 
 	@Override
@@ -205,7 +222,6 @@ public class AgentPlotChart implements IAgentPlotChart {
 			getSeries(_serieName).add(_x, _y);
 		else
 			getSeries(_serieName).addOrUpdate(_x, _y);
-
 	}
 
 	public static void prepareWindow(String _name) {
